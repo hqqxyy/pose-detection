@@ -11,7 +11,15 @@ function gpu_id = auto_select_gpu()
     gpuDevice([]);
 
     maxFreeMemory = 0;
-    for i = 1:gpuDeviceCount
+    if gpuDeviceCount == 1 % my lab computer
+        fprintf('Lab computer...\n');
+        gpu_cand_id = [1];
+    else
+        fprintf('Server computer...\n');
+        gpu_cand_id = [5, 6, 7, 8];
+    end
+        
+    for i = gpu_cand_id
         g = gpuDevice(i);
         freeMemory = g.FreeMemory();
         fprintf('GPU %d: free memory %d\n', i, freeMemory);
