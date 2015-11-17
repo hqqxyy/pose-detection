@@ -7,6 +7,7 @@ function dataset = lsp_trainval(dataset, usage, use_flip)
 
 d_step = 18;
 degree = [-180+d_step:d_step:-d_step,d_step:d_step:180];
+scale_factor = 0.3;
 switch usage
     case {'train'}
         dataset.imdb_train    = {  imdb_from_lsp(fullfile(pwd, 'datasets', 'LSP'),...
@@ -15,7 +16,8 @@ switch usage
             'extendedDir',     fullfile(pwd, 'datasets', 'LSPET'),...
             'extension',       'jpg',...
             'flip',            use_flip,...
-            'degree',          degree... degree
+            'degree',          degree,... degree
+            'scale_factor',    scale_factor...
             ) };       
         dataset.roidb_train   = cellfun(@(x) x.roidb_func(x), dataset.imdb_train, 'UniformOutput', false);
         

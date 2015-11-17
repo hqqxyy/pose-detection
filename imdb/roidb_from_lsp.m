@@ -36,6 +36,7 @@ if ~isempty(imdb.degree)
     cache_file = [cache_file, '_degree', num2str(length(imdb.degree))];
 end
 cache_file = [cache_file, '_joint', num2str(imdb.num_joints)];
+cache_file = [cache_file, '_scale', num2str(imdb.scale_factor)];
 cache_file = [cache_file, '.mat'];
 
 try
@@ -166,12 +167,13 @@ catch
     
 
     %% convert to bbox
+    scale_factor = imdb.scale_factor;
     for i = 1:numel(pos)
         tic_toc_print('convert joint to bbox (%s): %d/%d\n', imdb.name, i, numel(pos));
-        bbox(:,1) = max(1, pos(i).joints(:, 1) - pos(i).scale_x);
-        bbox(:,2) = max(1, pos(i).joints(:, 2) - pos(i).scale_y);
-        bbox(:,3) = min(imdb.sizes(i, 2), pos(i).joints(:, 1) + pos(i).scale_x);
-        bbox(:,4) = min(imdb.sizes(i, 1), pos(i).joints(:, 2) + pos(i).scale_y);
+        bbox(:,1) = max(1, pos(i).joints(:, 1) - scale_factor * pos(i).scale_x);
+        bbox(:,2) = max(1, pos(i).joints(:, 2) - scale_factor * pos(i).scale_y);
+        bbox(:,3) = min(imdb.sizes(i, 2), pos(i).joints(:, 1) + scale_factor * pos(i).scale_x);
+        bbox(:,4) = min(imdb.sizes(i, 1), pos(i).joints(:, 2) + scale_factor * pos(i).scale_y);
         pos(i).bbox = round(bbox);
         roidb.rois(i) = attach_lsp(pos(i).bbox, imdb.class_to_id);        
     end

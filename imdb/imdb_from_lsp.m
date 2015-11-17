@@ -36,6 +36,7 @@ ip.addParamValue('extension',       '',             @ischar);
 ip.addParamValue('flip',            true,           @islogical);
 ip.addParamValue('degree',          [],             @ismatrix);
 ip.addParamValue('num_joints',      26);
+ip.addParamValue('scale_factor',    1);
 ip.parse(root_dir, image_set, varargin{:});
 opts = ip.Results;
 
@@ -53,6 +54,8 @@ end
 if ~isempty(opts.degree)
     cache_file = [cache_file, '_degree', num2str(length(opts.degree))];
 end
+cache_file = [cache_file, '_scale', num2str(length(opts.scale_factor))];
+cache_file = [cache_file, '.mat'];
 
 try
     load(cache_file);
@@ -68,6 +71,7 @@ catch
     image_ids = cell(1000, 1);
     image_ids_at = @(i) sprintf('im%04d', i);
     imdb.image_set = opts.image_set;
+    imdb.scale_factor = opts.scale_factor;
     switch opts.image_set
         case('trainval')
             for i = 1:1000

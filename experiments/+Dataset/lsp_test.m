@@ -5,6 +5,7 @@ function dataset = lsp_test(dataset, usage, use_flip)
 
 % change to point to your devkit install
 degree = [];
+scale_factor = 0.3;
 switch usage
     case {'train'}
         dataset.imdb_train    = {  imdb_from_voc(devkit, 'test', '2007', use_flip) };
@@ -16,7 +17,8 @@ switch usage
             'extendedDir',     fullfile(pwd, 'datasets', 'LSPET'),...
             'extension',       'jpg',...
             'flip',            use_flip,...
-            'degree',          degree... degree
+            'degree',          degree,... degree
+            'scale_factor',    scale_factor...
             );       
         dataset.roidb_test    = dataset.imdb_test.roidb_func(dataset.imdb_test);
     otherwise

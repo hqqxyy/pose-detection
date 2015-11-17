@@ -44,7 +44,9 @@ if valid_boxes_num > 0
             colors_candidate = mat2cell(colors_candidate, ones(size(colors_candidate, 1), 1))';
             colors = colors_candidate;
     end
-            
+    
+    % add more colors
+    colors = cat(2, colors, colors);
 
     for i = 1:length(boxes)
         if isempty(boxes{i})
